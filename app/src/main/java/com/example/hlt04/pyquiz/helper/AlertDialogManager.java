@@ -1,13 +1,10 @@
 package com.example.hlt04.pyquiz.helper;
 
-/**
- * Created by hlt04 on 4/27/16.
- */
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.example.androidhive.R;
+import com.example.hlt04.pyquiz.R;
 
 public class AlertDialogManager {
     /**
