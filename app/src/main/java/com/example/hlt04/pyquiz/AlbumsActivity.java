@@ -25,11 +25,16 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.view.ViewGroup;
+import java.util.List;
+import android.content.Context;
 
 import com.example.hlt04.pyquiz.helper.AlertDialogManager;
 import com.example.hlt04.pyquiz.helper.ConnectionDetector;
 
 public class AlbumsActivity extends ListActivity {
+    private ArrayList<String> gradeString = new ArrayList<String>();
+
     // Connection detector
     ConnectionDetector cd;
 
@@ -42,16 +47,16 @@ public class AlbumsActivity extends ListActivity {
     // Creating JSON Parser object
     //JSONParser jsonParser = new JSONParser();
 
-    ArrayList<HashMap<String, String>> albumsList;
+    public ArrayList<HashMap<String, String>> albumsList;
 
     // albums JSONArray
     JSONArray albums = null;
     JSONObject state = null;
 
-    String userId = "adl01";
+    String userId = "";//"adl01";
 
     // albums JSON url
-    private static final String URL_ALBUMS = /*"http://api.androidhive.info/songs/albums.php";*/"http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=adl01&grp=ADL&sid=generate_a_session_id&cid=23&mod=all&models=0";
+    private static String URL_ALBUMS = "";///*"http://api.androidhive.info/songs/albums.php";*/"http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=adl01&grp=ADL&sid=generate_a_session_id&cid=23&mod=all&models=0";
 
     // ALL JSON node names
     private static final String TAG_ID = "id";
@@ -62,6 +67,11 @@ public class AlbumsActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
+
+        Intent i = getIntent();
+        userId = i.getStringExtra("userName1");
+        userId = "adl01";
+        URL_ALBUMS = "http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=" + userId + "&grp=ADL&sid=generate_a_session_id&cid=23&mod=all&models=0";
 
         cd = new ConnectionDetector(getApplicationContext());
 
@@ -117,7 +127,7 @@ public class AlbumsActivity extends ListActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(AlbumsActivity.this);
-            pDialog.setMessage("Listing Albums ...");
+            pDialog.setMessage("Listing Topics ...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -153,10 +163,10 @@ public class AlbumsActivity extends ListActivity {
             //json = "[{\"id\":1,\"name\":\"127 Hours\",\"songs_count\":14},{\"id\":2,\"name\":\"Adele 21\",\"songs_count\":11},{\"id\":3,\"name\":\"Lana Del Rey - Born to Die\",\"songs_count\":12},{\"id\":4,\"name\":\"Once\",\"songs_count\":13},{\"id\":5,\"name\":\"Away We Go\",\"songs_count\":13},{\"id\":6,\"name\":\"Eminem Curtain Call\",\"songs_count\":14},{\"id\":7,\"name\":\"Bad Meets Evil Eminem\",\"songs_count\":11},{\"id\":8,\"name\":\"Safe Trip Home\",\"songs_count\":11},{\"id\":9,\"name\":\"No Angel\",\"songs_count\":12}]";
 
             // Check your log cat for JSON reponse
-            Log.d("substring lala", "hi" + json.substring(98190) + "hi");
+            //Log.d("substring lala", "hi" + json.substring(98190) + "hi");
             Log.d("json length", "" + json.length());
             json = json.replace("function (x) { var y = Math.log(x)*0.25 + 1;  return (y < 0 ? 0 : y); }", "hi");
-            Log.d("substring lala", "hi" + json.substring(98190) + "hi");
+            //Log.d("substring lala", "hi" + json.substring(98190) + "hi");
             Log.d("json length", "" + json.length());
 
             try {
@@ -181,7 +191,7 @@ public class AlbumsActivity extends ListActivity {
                         map.put(TAG_ID, i + "");
                         map.put(TAG_NAME, name);
                         map.put(TAG_SONGS_COUNT, songs_count);
-
+                        gradeString.add(songs_count);
                         // adding HashList to ArrayList
                         albumsList.add(map);
                     }
@@ -208,12 +218,16 @@ public class AlbumsActivity extends ListActivity {
                     /**
                      * Updating parsed JSON data into ListView
                      * */
-                    ListAdapter adapter = new SimpleAdapter(
+                    ListAdapter adapter = new AlbumListAdapter(
                             AlbumsActivity.this, albumsList,
-                            R.layout.list_item_albums, new String[] { TAG_ID,
-                            TAG_NAME, TAG_SONGS_COUNT }, new int[] {
-                            R.id.album_id, R.id.album_name, R.id.songs_count });
-
+                            R.layout.list_item_albums, new String[]{TAG_ID,
+                            TAG_NAME, TAG_SONGS_COUNT}, new int[]{
+                            R.id.album_id, R.id.album_name, R.id.songs_count}, gradeString);
+                    //Log.d("String",R.id.songs_count + "*********************************************");
+                    //Log.d("String",R.id.songs_count + "*********************************************");
+                    //TextView newview = (TextView) findViewById(R.id.songs_count);
+                    //String grade = newview.getText().toString();
+                    //Log.d("String", gradeString + "*********************************************");
                     // updating listview
                     setListAdapter(adapter);
                 }
@@ -221,5 +235,53 @@ public class AlbumsActivity extends ListActivity {
 
         }
 
+        public class AlbumListAdapter extends SimpleAdapter {
+            private ArrayList<String> gradeStringHere;
+            private int[] colors = new int[] { 0x30ffffff, 0x30f2ffcc,0x30dfff80,0x30ccff33,0x30bfff00,0x3099cc00,0x30739900 };
+
+            public AlbumListAdapter(Context context, ArrayList<HashMap<String, String>> items, int resource, String[] from, int[] to,ArrayList<String> gradeStringnew) {
+                super(context, items, resource, from, to);
+                gradeStringHere = gradeStringnew;
+                //Log.d("String",gradeStringnew + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                int colorPos;
+                //TextView currentAlbumnSongsCount =(TextView) findViewById(R.id.songs_count);
+                //gradeString = currentAlbumnSongsCount.getText().toString();
+                //float grade =
+                //Log.d("String",gradeStringHere.get(position) + "______________________________________________________________________");
+                float grade = Float.parseFloat(gradeStringHere.get(position));
+                Log.d("String",grade + "______________________________________________________________________");
+                if (grade < 0.21)
+                    colorPos = 0;
+                else {
+                    if (grade < 0.41)
+                        colorPos = 1;
+                    else {
+                        if (grade < 0.61)
+                            colorPos = 2;
+                        else {
+                            if (grade < 0.81)
+                                colorPos = 4;
+                            else
+                                colorPos = 6;
+                        }
+                    }
+                }
+
+
+                view.setBackgroundColor(colors[colorPos]);
+                return view;
+            }
+        }
+
+
     }
+
+
 }

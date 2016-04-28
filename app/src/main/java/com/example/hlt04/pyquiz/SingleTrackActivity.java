@@ -27,6 +27,7 @@ import com.example.hlt04.pyquiz.helper.AlertDialogManager;
 import com.example.hlt04.pyquiz.helper.ConnectionDetector;
 
 public class SingleTrackActivity extends Activity {
+
     // Connection detector
     WebView wevView;
     ConnectionDetector cd;
@@ -137,7 +138,7 @@ public class SingleTrackActivity extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(SingleTrackActivity.this);
-            pDialog.setMessage("Loading song ...");
+            pDialog.setMessage("Loading Quiz ...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -168,12 +169,12 @@ public class SingleTrackActivity extends Activity {
                     TextView txt_duration = (TextView) findViewById(R.id.duration);
 
                     // displaying song data in view
-                    txt_song_name.setText(song_name);
-                    txt_album_name.setText(Html.fromHtml("<b>Album:</b> " + album_name));
-                    txt_duration.setText(Html.fromHtml("<b>Duration:</b> " + duration));
+                    //txt_song_name.setText(song_name);
+                    //txt_album_name.setText(Html.fromHtml("<b>Album:</b> " + album_name));
+                    //txt_duration.setText(Html.fromHtml("<b>Duration:</b> " + duration));
 
                     // Change Activity Title with Song title
-                    setTitle(song_name);
+                    //setTitle(song_name);
                 }
             });
 

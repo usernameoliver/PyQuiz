@@ -50,7 +50,7 @@ public class TrackListActivity extends ListActivity {
 
     // tracks JSON url
     // id - should be posted as GET params to get track list (ex: id = 5)
-    private static final String URL_ALBUMS = "http://api.androidhive.info/songs/album_tracks.php";
+    //private static final String URL_ALBUMS = "http://api.androidhive.info/songs/album_tracks.php";
 
     // ALL JSON node names
     private static final String TAG_SONGS = "songs";
@@ -109,7 +109,7 @@ public class TrackListActivity extends ListActivity {
                 String album_id = ((TextView) view.findViewById(R.id.album_id)).getText().toString();
                 String song_id = ((TextView) view.findViewById(R.id.song_id)).getText().toString();
                 String track_no = ((TextView) view.findViewById(R.id.track_no)).getText().toString();
-                Toast.makeText(getApplicationContext(), "Album Id: " + album_id  + ", Song Id: " + song_id, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Album Id: " + album_id  + ", Song Id: " + song_id, Toast.LENGTH_SHORT).show();
 
                 i.putExtra("album_id", album_id);
                 i.putExtra("song_id", song_id);
@@ -132,7 +132,7 @@ public class TrackListActivity extends ListActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(TrackListActivity.this);
-            pDialog.setMessage("Loading songs ...");
+            pDialog.setMessage("Loading Questions ...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
