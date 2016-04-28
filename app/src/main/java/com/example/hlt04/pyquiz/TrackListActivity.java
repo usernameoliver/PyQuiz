@@ -78,7 +78,12 @@ public class TrackListActivity extends ListActivity {
         // Get album id
         Intent i = getIntent();
         album_id = i.getStringExtra("album_id");
-
+        try {
+            albums = new JSONArray(i.getStringExtra("albums"));
+            state = new JSONObject(i.getStringExtra("state"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         // Hashmap for ListView
         tracksList = new ArrayList<HashMap<String, String>>();
 
@@ -137,37 +142,22 @@ public class TrackListActivity extends ListActivity {
          * getting tracks json and parsing
          * */
         protected String doInBackground(String... args) {
-            // Building Parameters
-            //List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-            // post album id as GET parameter
-            //params.add(new BasicNameValuePair(TAG_ID, album_id));
-
-            // getting JSON string from URL
-            //String json = jsonParser.makeHttpRequest(URL_ALBUMS, "GET",
-              //      params);
-            String json = "{\"id\":1,\"album\":\"127 Hours\",\"songs\":[{\"id\":1,\"name\":\"Never Hear Surf Music Again\",\"duration\":\"5:52\"},{\"id\":2,\"name\":\"The Canyon\",\"duration\":\"3:01\"},{\"id\":3,\"name\":\"Liberation Begins\",\"duration\":\"2:14\"},{\"id\":4,\"name\":\"Touch of the Sun\",\"duration\":\"4:39\"},{\"id\":5,\"name\":\"Lovely Day\",\"duration\":\"4:16\"},{\"id\":6,\"name\":\"Ca Plane Pour Moi\",\"duration\":\"3:00\"},{\"id\":7,\"name\":\"Liberation In A Dream\",\"duration\":\"4:06\"},{\"id\":8,\"name\":\"If You Love Me (Really Love Me)\",\"duration\":\"3:27\"},{\"id\":9,\"name\":\"Acid Darbari\",\"duration\":\"4:21\"},{\"id\":10,\"name\":\"R.I.P.\",\"duration\":\"5:11\"},{\"id\":11,\"name\":\"Festival\",\"duration\":\"9:26\"},{\"id\":12,\"name\":\"If I Rise\",\"duration\":\"4:38\"},{\"id\":13,\"name\":\"Liberation\",\"duration\":\"3:11\"},{\"id\":14,\"name\":\"Nocturne No. 2 in E flat\",\"duration\":\"4:01\"}]}";
-            // Check your log cat for JSON reponse
-            Log.d("Track List JSON: ", json);
 
             try {
-                JSONObject jObj = new JSONObject(json);
-                if (jObj != null) {
-                    String album_id = jObj.getString(TAG_ID);
-                    album_name = jObj.getString(TAG_ALBUM);
-                    albums = jObj.getJSONArray(TAG_SONGS);
-
+                if (albums != null) {
+                    album_name = albums.getJSONObject(Integer.valueOf(album_id)).getString("id");
+                    albums = albums.getJSONObject(Integer.valueOf(album_id)).getJSONObject("activities").getJSONArray("qp");
                     if (albums != null) {
                         // looping through All songs
                         for (int i = 0; i < albums.length(); i++) {
                             JSONObject c = albums.getJSONObject(i);
 
                             // Storing each json item in variable
-                            String song_id = c.getString(TAG_ID);
+                            String song_id = c.getString("id");
                             // track no - increment i value
                             String track_no = String.valueOf(i + 1);
-                            String name = c.getString(TAG_NAME);
-                            String duration = c.getString(TAG_DURATION);
+                            String name = c.getString("name");
+                            String duration = state.getJSONObject("activities").getJSONObject(album_name).getJSONObject("qp").getJSONObject(song_id).getJSONObject("values").getString("p");
 
                             // creating new HashMap
                             HashMap<String, String> map = new HashMap<String, String>();
