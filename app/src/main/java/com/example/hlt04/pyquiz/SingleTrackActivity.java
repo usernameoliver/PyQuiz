@@ -15,7 +15,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
 
 import com.example.hlt04.pyquiz.helper.AlertDialogManager;
 import com.example.hlt04.pyquiz.helper.ConnectionDetector;
@@ -23,6 +31,7 @@ import com.example.hlt04.pyquiz.helper.JSONParser;
 
 public class SingleTrackActivity extends Activity {
     // Connection detector
+    WebView wevView;
     ConnectionDetector cd;
 
     // Alert dialog manager
@@ -51,12 +60,21 @@ public class SingleTrackActivity extends Activity {
     private static final String TAG_NAME = "name";
     private static final String TAG_DURATION = "duration";
     private static final String TAG_ALBUM = "album";
-
+    WebView webView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_track);
+        webView = (WebView) findViewById(R.id.webview);
+        Button button = (Button)findViewById(R.id.run);
+        gotoPage();
+       /* button.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                gotoPage();
+            }
+        });*/
         cd = new ConnectionDetector(getApplicationContext());
 
         // Check if Internet present
@@ -76,6 +94,27 @@ public class SingleTrackActivity extends Activity {
         // calling background thread
         new LoadSingleTrack().execute();
     }
+
+    private void gotoPage() {
+        EditText text = (EditText) findViewById(R.id.url);
+        //String url = text.getText().toString();
+        String url = "http://www.google.com";/////////////////////////////////url need to be assigned
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setBuiltInZoomControls(true);
+
+        webView.setWebViewClient(new Callback());  //HERE IS THE MAIN CHANGE
+        webView.loadUrl(url);
+
+    }
+    private class Callback extends WebViewClient{  //HERE IS THE MAIN CHANGE.
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return (false);
+        }
+
+    }
+
 
     /**
      * Background Async Task to get single song information
