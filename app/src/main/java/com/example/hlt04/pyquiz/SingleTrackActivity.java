@@ -93,8 +93,6 @@ public class SingleTrackActivity extends Activity {
         Log.d("album_id", album_id);
         Log.d("song_id", song_id);
         Log.d("track_no", track_no);
-        Log.d("json", i.getStringExtra("albums"));
-
 
         // calling background thread
         new LoadSingleTrack().execute();

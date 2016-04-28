@@ -114,7 +114,6 @@ public class TrackListActivity extends ListActivity {
                 i.putExtra("album_id", album_id);
                 i.putExtra("song_id", song_id);
                 i.putExtra("track_no", track_no);
-                i.putExtra("albums", albums.toString());
                 startActivity(i);
             }
         });
