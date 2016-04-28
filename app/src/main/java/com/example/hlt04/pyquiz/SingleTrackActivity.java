@@ -15,19 +15,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
 import com.example.hlt04.pyquiz.helper.AlertDialogManager;
 import com.example.hlt04.pyquiz.helper.ConnectionDetector;
-import com.example.hlt04.pyquiz.helper.JSONParser;
 
 public class SingleTrackActivity extends Activity {
     // Connection detector
@@ -41,7 +38,7 @@ public class SingleTrackActivity extends Activity {
     private ProgressDialog pDialog;
 
     // Creating JSON Parser object
-    JSONParser jsonParser = new JSONParser();
+    //JSONParser jsonParser = new JSONParser();
 
     // tracks JSONArray
     JSONArray albums = null;
@@ -145,17 +142,17 @@ public class SingleTrackActivity extends Activity {
          * */
         protected String doInBackground(String... args) {
             // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            //List<NameValuePair> params = new ArrayList<NameValuePair>();
 
             // post album id, song id as GET parameters
-            params.add(new BasicNameValuePair("album", album_id));
-            params.add(new BasicNameValuePair("song", song_id));
+            //params.add(new BasicNameValuePair("album", album_id));
+            //params.add(new BasicNameValuePair("song", song_id));
 
             // getting JSON string from URL
-            String json = jsonParser.makeHttpRequest(URL_SONG, "GET",
-                    params);
+            //String json = jsonParser.makeHttpRequest(URL_SONG, "GET",
+                   // params);
 
-            json = "{\"id\":1,\"name\":\"Born to Die\",\"duration\":\"4:46\",\"album_id\":\"3\",\"album\":\"Lana Del Rey - Born to Die\"}";
+            String json = "{\"id\":1,\"name\":\"Born to Die\",\"duration\":\"4:46\",\"album_id\":\"3\",\"album\":\"Lana Del Rey - Born to Die\"}";
 
             // Check your log cat for JSON reponse
             Log.d("Single Track JSON: ", json);

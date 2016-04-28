@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import com.example.hlt04.pyquiz.helper.AlertDialogManager;
 import com.example.hlt04.pyquiz.helper.ConnectionDetector;
-import com.example.hlt04.pyquiz.helper.JSONParser;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -38,7 +37,7 @@ public class TrackListActivity extends ListActivity {
     private ProgressDialog pDialog;
 
     // Creating JSON Parser object
-    JSONParser jsonParser = new JSONParser();
+    //JSONParser jsonParser = new JSONParser();
 
     ArrayList<HashMap<String, String>> tracksList;
 
@@ -138,15 +137,15 @@ public class TrackListActivity extends ListActivity {
          * */
         protected String doInBackground(String... args) {
             // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            //List<NameValuePair> params = new ArrayList<NameValuePair>();
 
             // post album id as GET parameter
-            params.add(new BasicNameValuePair(TAG_ID, album_id));
+            //params.add(new BasicNameValuePair(TAG_ID, album_id));
 
             // getting JSON string from URL
-            String json = jsonParser.makeHttpRequest(URL_ALBUMS, "GET",
-                    params);
-            json = "{\"id\":1,\"album\":\"127 Hours\",\"songs\":[{\"id\":1,\"name\":\"Never Hear Surf Music Again\",\"duration\":\"5:52\"},{\"id\":2,\"name\":\"The Canyon\",\"duration\":\"3:01\"},{\"id\":3,\"name\":\"Liberation Begins\",\"duration\":\"2:14\"},{\"id\":4,\"name\":\"Touch of the Sun\",\"duration\":\"4:39\"},{\"id\":5,\"name\":\"Lovely Day\",\"duration\":\"4:16\"},{\"id\":6,\"name\":\"Ca Plane Pour Moi\",\"duration\":\"3:00\"},{\"id\":7,\"name\":\"Liberation In A Dream\",\"duration\":\"4:06\"},{\"id\":8,\"name\":\"If You Love Me (Really Love Me)\",\"duration\":\"3:27\"},{\"id\":9,\"name\":\"Acid Darbari\",\"duration\":\"4:21\"},{\"id\":10,\"name\":\"R.I.P.\",\"duration\":\"5:11\"},{\"id\":11,\"name\":\"Festival\",\"duration\":\"9:26\"},{\"id\":12,\"name\":\"If I Rise\",\"duration\":\"4:38\"},{\"id\":13,\"name\":\"Liberation\",\"duration\":\"3:11\"},{\"id\":14,\"name\":\"Nocturne No. 2 in E flat\",\"duration\":\"4:01\"}]}";
+            //String json = jsonParser.makeHttpRequest(URL_ALBUMS, "GET",
+              //      params);
+            String json = "{\"id\":1,\"album\":\"127 Hours\",\"songs\":[{\"id\":1,\"name\":\"Never Hear Surf Music Again\",\"duration\":\"5:52\"},{\"id\":2,\"name\":\"The Canyon\",\"duration\":\"3:01\"},{\"id\":3,\"name\":\"Liberation Begins\",\"duration\":\"2:14\"},{\"id\":4,\"name\":\"Touch of the Sun\",\"duration\":\"4:39\"},{\"id\":5,\"name\":\"Lovely Day\",\"duration\":\"4:16\"},{\"id\":6,\"name\":\"Ca Plane Pour Moi\",\"duration\":\"3:00\"},{\"id\":7,\"name\":\"Liberation In A Dream\",\"duration\":\"4:06\"},{\"id\":8,\"name\":\"If You Love Me (Really Love Me)\",\"duration\":\"3:27\"},{\"id\":9,\"name\":\"Acid Darbari\",\"duration\":\"4:21\"},{\"id\":10,\"name\":\"R.I.P.\",\"duration\":\"5:11\"},{\"id\":11,\"name\":\"Festival\",\"duration\":\"9:26\"},{\"id\":12,\"name\":\"If I Rise\",\"duration\":\"4:38\"},{\"id\":13,\"name\":\"Liberation\",\"duration\":\"3:11\"},{\"id\":14,\"name\":\"Nocturne No. 2 in E flat\",\"duration\":\"4:01\"}]}";
             // Check your log cat for JSON reponse
             Log.d("Track List JSON: ", json);
 
