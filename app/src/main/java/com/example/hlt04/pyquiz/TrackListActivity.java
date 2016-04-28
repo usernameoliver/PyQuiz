@@ -43,6 +43,7 @@ public class TrackListActivity extends ListActivity {
 
     // tracks JSONArray
     JSONArray albums = null;
+    JSONObject state = null;
 
     // Album id
     String album_id, album_name;

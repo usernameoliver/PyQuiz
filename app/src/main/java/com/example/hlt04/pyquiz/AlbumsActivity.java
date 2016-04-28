@@ -46,6 +46,9 @@ public class AlbumsActivity extends ListActivity {
 
     // albums JSONArray
     JSONArray albums = null;
+    JSONObject state = null;
+
+    String userId = "adl01";
 
     // albums JSON url
     private static final String URL_ALBUMS = /*"http://api.androidhive.info/songs/albums.php";*/"http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=adl01&grp=ADL&sid=generate_a_session_id&cid=23&mod=all&models=0";
@@ -95,7 +98,8 @@ public class AlbumsActivity extends ListActivity {
                 // send album id to tracklist activity to get list of songs under that album
                 String album_id = ((TextView) view.findViewById(R.id.album_id)).getText().toString();
                 i.putExtra("album_id", album_id);
-
+                i.putExtra("albums", albums.toString());
+                i.putExtra("state", state.toString());
                 startActivity(i);
             }
         });
@@ -156,8 +160,9 @@ public class AlbumsActivity extends ListActivity {
             Log.d("json length", "" + json.length());
 
             try {
-                albums = new JSONObject(json).getJSONArray("topics");
-
+                JSONObject js = new JSONObject(json);
+                albums = js.getJSONArray("topics");
+                state = js.getJSONArray("learners").getJSONObject(0).getJSONObject("state");
                 if (albums != null) {
                     // looping through All albums
                     Log.d("within json loop", "in loop lala");
@@ -167,13 +172,13 @@ public class AlbumsActivity extends ListActivity {
                         // Storing each json item values in variable
                         String id = c.getString("id");
                         String name = c.getString("name");
-                        String songs_count = c.getString("difficulty");
+                        String songs_count = state.getJSONObject("topics").getJSONObject(id).getJSONObject("values").getJSONObject("qp").getString("p");
 
                         // creating new HashMap
                         HashMap<String, String> map = new HashMap<String, String>();
 
                         // adding each child node to HashMap key => value
-                        map.put(TAG_ID, id);
+                        map.put(TAG_ID, i + "");
                         map.put(TAG_NAME, name);
                         map.put(TAG_SONGS_COUNT, songs_count);
 
