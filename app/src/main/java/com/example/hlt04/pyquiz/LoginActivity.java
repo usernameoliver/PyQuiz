@@ -5,21 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
 /**
  * A login screen that offers login via email/password.
@@ -37,13 +28,17 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         b1=(Button)findViewById(R.id.button);
-        ed1=(EditText)findViewById(R.id.editText);
-        ed2=(EditText)findViewById(R.id.editText2);
+        ed1=(EditText)findViewById(R.id.editText);//username
+
+
+        ed2=(EditText)findViewById(R.id.editText2);//password
 
         b2=(Button)findViewById(R.id.button2);
         tx1=(TextView)findViewById(R.id.textView3);
         tx1.setVisibility(View.GONE);
 
+
+        //final TextView t=(TextView)findViewById(R.id.textView4);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,10 +48,13 @@ public class LoginActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Redirecting...", Toast.LENGTH_SHORT).show();
 
                     Intent i = new Intent(getApplicationContext(), AlbumsActivity.class);
-
+                    String userName = String.valueOf(ed1.getText());
+                    Log.d("username", userName);
+                    i.putExtra("userName1",userName);
+                    //t.setText(userName);
                     // send album id to tracklist activity to get list of songs under that album
-                    //String album_id = ((TextView) view.findViewById(R.id.album_id)).getText().toString();//To pass name to AlbumsActivity
-                    //i.putExtra("album_id", album_id);
+                    //String userName = ((EditText) v.findViewById(R.id.editText)).getText().toString();//To pass name to AlbumsActivity
+                    //i.putExtra("textView4",userName);
 
                     startActivity(i);
 
