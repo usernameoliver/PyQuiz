@@ -237,7 +237,7 @@ public class AlbumsActivity extends ListActivity {
 
         public class AlbumListAdapter extends SimpleAdapter {
             private ArrayList<String> gradeStringHere;
-            private int[] colors = new int[] { 0x30ffffff, 0x30f2ffcc,0x30dfff80,0x30ccff33,0x30bfff00,0x3099cc00,0x30739900 };
+            private int[] colors = new int[] { 0x30ffffff, 0x30f2ffcc,0x30dfff80,0x30ccff33,0x30bfff00,0x3099cc00,0x3000e600 };
 
             public AlbumListAdapter(Context context, ArrayList<HashMap<String, String>> items, int resource, String[] from, int[] to,ArrayList<String> gradeStringnew) {
                 super(context, items, resource, from, to);

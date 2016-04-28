@@ -14,11 +14,13 @@ import com.example.hlt04.pyquiz.helper.ConnectionDetector;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TrackListActivity extends ListActivity {
+    private ArrayList<String> durationString = new ArrayList<String>();
     // Connection detector
     ConnectionDetector cd;
 
@@ -169,6 +172,7 @@ public class TrackListActivity extends ListActivity {
                             map.put("track_no", track_no + "");
                             map.put(TAG_NAME, name);
                             map.put(TAG_DURATION, duration);
+                            durationString.add(duration);
 
                             // adding HashList to ArrayList
                             tracksList.add(map);
@@ -197,11 +201,11 @@ public class TrackListActivity extends ListActivity {
                     /**
                      * Updating parsed JSON data into ListView
                      * */
-                    ListAdapter adapter = new SimpleAdapter(
+                    ListAdapter adapter = new TrackListAdapter(
                             TrackListActivity.this, tracksList,
                             R.layout.list_item_tracks, new String[] { "album_id", TAG_ID, "track_no",
                             TAG_NAME, TAG_DURATION }, new int[] {
-                            R.id.album_id, R.id.song_id, R.id.track_no, R.id.album_name, R.id.song_duration });
+                            R.id.album_id, R.id.song_id, R.id.track_no, R.id.album_name, R.id.song_duration, },durationString);
                     // updating listview
                     setListAdapter(adapter);
 
@@ -210,6 +214,51 @@ public class TrackListActivity extends ListActivity {
                 }
             });
 
+        }
+
+        public class TrackListAdapter extends SimpleAdapter {
+            private ArrayList<String> gradeStringHere;
+            private int[] colors = new int[] { 0x30ffffff, 0x30f2ffcc,0x30dfff80,0x30ccff33,0x30bfff00,0x3099cc00,0x3000e600 };
+
+            public TrackListAdapter(Context context, ArrayList<HashMap<String, String>> items, int resource, String[] from, int[] to,ArrayList<String> gradeStringnew) {
+                super(context, items, resource, from, to);
+                gradeStringHere = gradeStringnew;
+                //Log.d("String",gradeStringnew + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                int colorPos;
+                //TextView currentAlbumnSongsCount =(TextView) findViewById(R.id.songs_count);
+                //gradeString = currentAlbumnSongsCount.getText().toString();
+                //float grade =
+                //Log.d("String",gradeStringHere.get(position) + "______________________________________________________________________");
+                float grade = Float.parseFloat(gradeStringHere.get(position));
+                Log.d("String",grade + "______________________________________________________________________");
+                if (grade < 0.21)
+                    colorPos = 0;
+                else {
+                    if (grade < 0.41)
+                        colorPos = 1;
+                    else {
+                        if (grade < 0.61)
+                            colorPos = 2;
+                        else {
+                            if (grade < 0.81)
+                                colorPos = 4;
+                            else
+                                colorPos = 6;
+                        }
+                    }
+                }
+
+
+                view.setBackgroundColor(colors[colorPos]);
+                return view;
+            }
         }
 
     }
