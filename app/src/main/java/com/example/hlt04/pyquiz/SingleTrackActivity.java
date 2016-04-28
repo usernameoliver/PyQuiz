@@ -41,17 +41,18 @@ public class SingleTrackActivity extends Activity {
     //JSONParser jsonParser = new JSONParser();
 
     // tracks JSONArray
-    JSONArray albums = null;
+    //JSONArray albums = null;
 
     // Album id
     String album_id = null;
     String song_id = null;
+    String track_no = null;
 
     String album_name, song_name, duration;
 
     // single song JSON url
     // GET parameters album, song
-    private static final String URL_SONG = "http://api.androidhive.info/songs/track.php";
+    private static final String url = null;
 
     // ALL JSON node names
     private static final String TAG_NAME = "name";
@@ -64,7 +65,6 @@ public class SingleTrackActivity extends Activity {
         setContentView(R.layout.activity_single_track);
         webView = (WebView) findViewById(R.id.webview);
         Button button = (Button)findViewById(R.id.run);
-        gotoPage();
        /* button.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -87,6 +87,14 @@ public class SingleTrackActivity extends Activity {
         Intent i = getIntent();
         album_id = i.getStringExtra("album_id");
         song_id = i.getStringExtra("song_id");
+        gotoPage();
+
+        track_no = i.getStringExtra("track_no");
+        Log.d("album_id", album_id);
+        Log.d("song_id", song_id);
+        Log.d("track_no", track_no);
+        Log.d("json", i.getStringExtra("albums"));
+
 
         // calling background thread
         new LoadSingleTrack().execute();
@@ -96,10 +104,10 @@ public class SingleTrackActivity extends Activity {
         EditText text = (EditText) findViewById(R.id.url);
         //String url = text.getText().toString();
 
-        String url = "http://columbus.exp.sis.pitt.edu/quizpet/displayQuiz.jsp?rdfID=q_py_arithmetic1&act=q_py_topic_variables&sub=q_py_arithmetic1&lineRec=1&svc=masterygrids";/////////////////////////////////url need to be assigned
+        //String url = "http://columbus.exp.sis.pitt.edu/quizpet/displayQuiz.jsp?rdfID=q_py_arithmetic1&act=q_py_topic_variables&sub=q_py_arithmetic1&lineRec=1&svc=masterygrids";/////////////////////////////////url need to be assigned
 
-       // String url = "http://columbus.exp.sis.pitt.edu/quizpet/displayQuiz.jsp?rdfID=q_py_arithmetic2&act=q_py_topic_variables&sub=q_py_arithmetic2&lineRec=1&svc=masterygrids";/////////////////////////////////url need to be assigned
-
+        //String url = "http://columbus.exp.sis.pitt.edu/quizpet/displayQuiz.jsp?rdfID=q_py_arithmetic2&act=q_py_topic_variables&sub=q_py_arithmetic2&lineRec=1&svc=masterygrids";/////////////////////////////////url need to be assigned
+        String url = album_id;
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
@@ -141,33 +149,7 @@ public class SingleTrackActivity extends Activity {
          * getting song json and parsing
          * */
         protected String doInBackground(String... args) {
-            // Building Parameters
-            //List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-            // post album id, song id as GET parameters
-            //params.add(new BasicNameValuePair("album", album_id));
-            //params.add(new BasicNameValuePair("song", song_id));
-
-            // getting JSON string from URL
-            //String json = jsonParser.makeHttpRequest(URL_SONG, "GET",
-                   // params);
-
-            String json = "{\"id\":1,\"name\":\"Born to Die\",\"duration\":\"4:46\",\"album_id\":\"3\",\"album\":\"Lana Del Rey - Born to Die\"}";
-
-            // Check your log cat for JSON reponse
-            Log.d("Single Track JSON: ", json);
-
-            try {
-                JSONObject jObj = new JSONObject(json);
-                if(jObj != null){
-                    song_name = jObj.getString(TAG_NAME);
-                    album_name = jObj.getString(TAG_ALBUM);
-                    duration = jObj.getString(TAG_DURATION);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
             return null;
         }

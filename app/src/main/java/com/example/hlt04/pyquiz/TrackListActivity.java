@@ -108,12 +108,13 @@ public class TrackListActivity extends ListActivity {
                 // both album id and song is needed
                 String album_id = ((TextView) view.findViewById(R.id.album_id)).getText().toString();
                 String song_id = ((TextView) view.findViewById(R.id.song_id)).getText().toString();
-
+                String track_no = ((TextView) view.findViewById(R.id.track_no)).getText().toString();
                 Toast.makeText(getApplicationContext(), "Album Id: " + album_id  + ", Song Id: " + song_id, Toast.LENGTH_SHORT).show();
 
                 i.putExtra("album_id", album_id);
                 i.putExtra("song_id", song_id);
-
+                i.putExtra("track_no", track_no);
+                i.putExtra("albums", albums.toString());
                 startActivity(i);
             }
         });
@@ -153,6 +154,7 @@ public class TrackListActivity extends ListActivity {
                             JSONObject c = albums.getJSONObject(i);
 
                             // Storing each json item in variable
+                            String song_url = c.getString("url");
                             String song_id = c.getString("id");
                             // track no - increment i value
                             String track_no = String.valueOf(i + 1);
@@ -163,9 +165,9 @@ public class TrackListActivity extends ListActivity {
                             HashMap<String, String> map = new HashMap<String, String>();
 
                             // adding each child node to HashMap key => value
-                            map.put("album_id", album_id);
+                            map.put("album_id", song_url);
                             map.put(TAG_ID, song_id);
-                            map.put("track_no", track_no + ".");
+                            map.put("track_no", track_no + "");
                             map.put(TAG_NAME, name);
                             map.put(TAG_DURATION, duration);
 
