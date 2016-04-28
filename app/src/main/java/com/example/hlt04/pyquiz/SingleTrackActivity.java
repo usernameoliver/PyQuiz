@@ -98,8 +98,13 @@ public class SingleTrackActivity extends Activity {
     private void gotoPage() {
         EditText text = (EditText) findViewById(R.id.url);
         //String url = text.getText().toString();
+
         String url = "http://columbus.exp.sis.pitt.edu/quizpet/displayQuiz.jsp?rdfID=q_py_arithmetic1&act=q_py_topic_variables&sub=q_py_arithmetic1&lineRec=1&svc=masterygrids";/////////////////////////////////url need to be assigned
+
+       // String url = "http://columbus.exp.sis.pitt.edu/quizpet/displayQuiz.jsp?rdfID=q_py_arithmetic2&act=q_py_topic_variables&sub=q_py_arithmetic2&lineRec=1&svc=masterygrids";/////////////////////////////////url need to be assigned
+
         WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
 
         webView.setWebViewClient(new Callback());  //HERE IS THE MAIN CHANGE
