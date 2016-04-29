@@ -70,7 +70,6 @@ public class AlbumsActivity extends ListActivity {
 
         Intent i = getIntent();
         userId = i.getStringExtra("userName1");
-        userId = "adl01";
         URL_ALBUMS = "http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=" + userId + "&grp=ADL&sid=generate_a_session_id&cid=23&mod=all&models=0";
 
         cd = new ConnectionDetector(getApplicationContext());

@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -21,9 +23,20 @@ public class LoginActivity extends Activity {
 
     TextView tx1;
     int counter = 3;
+    private ArrayList<String> userList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        userList.add("adl01");
+        userList.add("adl02");
+        userList.add("adl03");
+        userList.add("adl04");
+        userList.add("adl05");
+        userList.add("adl06");
+        userList.add("adl07");
+        userList.add("adl08");
+        userList.add("adl09");
+        userList.add("adl10");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -42,9 +55,9 @@ public class LoginActivity extends Activity {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ed1.getText().toString().equals("") &&
+                if(userList.contains(ed1.getText().toString())&&
 
-                        ed2.getText().toString().equals("")) {
+                        ed2.getText().toString().equals(ed1.getText().toString())) {
                     Toast.makeText(getApplicationContext(), "Redirecting...", Toast.LENGTH_SHORT).show();
 
                     Intent i = new Intent(getApplicationContext(), AlbumsActivity.class);
