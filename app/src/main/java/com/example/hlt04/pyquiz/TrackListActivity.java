@@ -1,16 +1,14 @@
 package com.example.hlt04.pyquiz;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.hlt04.pyquiz.helper.AlertDialogManager;
 import com.example.hlt04.pyquiz.helper.ConnectionDetector;
+import com.example.hlt04.pyquiz.helper.HttpGet;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -39,21 +37,20 @@ public class TrackListActivity extends ListActivity {
     // Progress Dialog
     private ProgressDialog pDialog;
 
-    // Creating JSON Parser object
-    //JSONParser jsonParser = new JSONParser();
+    //Creating http get object
+    HttpGet hg = new HttpGet();
 
     ArrayList<HashMap<String, String>> tracksList;
 
     // tracks JSONArray
-    JSONArray albums = null;
+    JSONObject albums = null;
     JSONObject state = null;
 
     // Album id
-    String album_id, album_name;
+    String userId, album_index, album_id, album_name;
 
-    // tracks JSON url
-    // id - should be posted as GET params to get track list (ex: id = 5)
-    //private static final String URL_ALBUMS = "http://api.androidhive.info/songs/album_tracks.php";
+    private static String URL_USER = "";//
+
 
     // ALL JSON node names
     private static final String TAG_SONGS = "songs";
@@ -80,10 +77,14 @@ public class TrackListActivity extends ListActivity {
 
         // Get album id
         Intent i = getIntent();
-        album_id = i.getStringExtra("album_id");
+        userId = i.getStringExtra("userId");
+        album_index = i.getStringExtra("album_index");
+        album_name = i.getStringExtra("album_name");
+
+        URL_USER = "http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=" + userId + "&grp=ADL&sid=abcd&cid=23&mod=user";
+
         try {
-            albums = new JSONArray(i.getStringExtra("albums"));
-            state = new JSONObject(i.getStringExtra("state"));
+            albums = new JSONObject(i.getStringExtra("albums"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -114,14 +115,18 @@ public class TrackListActivity extends ListActivity {
                 String track_no = ((TextView) view.findViewById(R.id.track_no)).getText().toString();
                 //Toast.makeText(getApplicationContext(), "Album Id: " + album_id  + ", Song Id: " + song_id, Toast.LENGTH_SHORT).show();
 
-                i.putExtra("album_id", album_id);
+                i.putExtra("album_id", album_id + "&usr=" + userId + "&grp=ADL&sid=abcd&cid=23");
                 i.putExtra("song_id", song_id);
                 i.putExtra("track_no", track_no);
+                i.putExtra("userId", userId);//such as adl04
                 startActivity(i);
             }
         });
 
     }
+
+
+
 
     /**
      * Background Async Task to Load all tracks under one album
@@ -145,15 +150,18 @@ public class TrackListActivity extends ListActivity {
          * getting tracks json and parsing
          * */
         protected String doInBackground(String... args) {
-
+            String jsonState = hg.getJson(URL_USER);
             try {
+                JSONObject jsState = new JSONObject(jsonState);
+                state = jsState.getJSONObject("learner").getJSONObject("state");
+
                 if (albums != null) {
-                    album_name = albums.getJSONObject(Integer.valueOf(album_id)).getString("id");
-                    albums = albums.getJSONObject(Integer.valueOf(album_id)).getJSONObject("activities").getJSONArray("qp");
+                    album_id = albums.getString("id");//actually album_id string
+                    JSONArray album_question = albums.getJSONObject("activities").getJSONArray("qp");
                     if (albums != null) {
                         // looping through All songs
-                        for (int i = 0; i < albums.length(); i++) {
-                            JSONObject c = albums.getJSONObject(i);
+                        for (int i = 0; i < album_question.length(); i++) {
+                            JSONObject c = album_question.getJSONObject(i);
 
                             // Storing each json item in variable
                             String song_url = c.getString("url");
@@ -161,17 +169,17 @@ public class TrackListActivity extends ListActivity {
                             // track no - increment i value
                             String track_no = String.valueOf(i + 1);
                             String name = c.getString("name");
-                            String duration = state.getJSONObject("activities").getJSONObject(album_name).getJSONObject("qp").getJSONObject(song_id).getJSONObject("values").getString("p");
+                            String duration = state.getJSONObject("activities").getJSONObject(album_id).getJSONObject("qp").getJSONObject(song_id).getJSONObject("values").getString("p");
 
                             // creating new HashMap
                             HashMap<String, String> map = new HashMap<String, String>();
 
                             // adding each child node to HashMap key => value
-                            map.put("album_id", song_url);
-                            map.put(TAG_ID, song_id);
-                            map.put("track_no", track_no + "");
-                            map.put(TAG_NAME, name);
-                            map.put(TAG_DURATION, duration);
+                            map.put("album_id", song_url);//song url
+                            map.put(TAG_ID, song_id);// song id
+                            map.put("track_no", track_no + "");//song index starting from 1
+                            map.put(TAG_NAME, name);//song name
+                            map.put(TAG_DURATION, duration);//song progress
                             durationString.add(duration);
 
                             // adding HashList to ArrayList

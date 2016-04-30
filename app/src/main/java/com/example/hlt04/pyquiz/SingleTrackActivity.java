@@ -48,6 +48,7 @@ public class SingleTrackActivity extends Activity {
     String album_id = null;
     String song_id = null;
     String track_no = null;
+    String userId = null;
 
     String album_name, song_name, duration;
 
@@ -86,6 +87,7 @@ public class SingleTrackActivity extends Activity {
 
         // Get album id, song id
         Intent i = getIntent();
+        userId = i.getStringExtra("userId");
         album_id = i.getStringExtra("album_id");
         song_id = i.getStringExtra("song_id");
         gotoPage();
@@ -98,6 +100,7 @@ public class SingleTrackActivity extends Activity {
         // calling background thread
         new LoadSingleTrack().execute();
     }
+
 
     private void gotoPage() {
         EditText text = (EditText) findViewById(R.id.url);

@@ -26,11 +26,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.view.ViewGroup;
-import java.util.List;
 import android.content.Context;
 
 import com.example.hlt04.pyquiz.helper.AlertDialogManager;
 import com.example.hlt04.pyquiz.helper.ConnectionDetector;
+import com.example.hlt04.pyquiz.helper.HttpGet;
 
 public class AlbumsActivity extends ListActivity {
     private ArrayList<String> gradeString = new ArrayList<String>();
@@ -44,10 +44,9 @@ public class AlbumsActivity extends ListActivity {
     // Progress Dialog
     private ProgressDialog pDialog;
 
-    // Creating JSON Parser object
-    //JSONParser jsonParser = new JSONParser();
-
     public ArrayList<HashMap<String, String>> albumsList;
+
+    HttpGet hg = new HttpGet();
 
     // albums JSONArray
     JSONArray albums = null;
@@ -57,7 +56,7 @@ public class AlbumsActivity extends ListActivity {
 
     // albums JSON url
     private static String URL_ALBUMS = "";///*"http://api.androidhive.info/songs/albums.php";*/"http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=adl01&grp=ADL&sid=generate_a_session_id&cid=23&mod=all&models=0";
-
+    private static String URL_USER = "";//
     // ALL JSON node names
     private static final String TAG_ID = "id";
     private static final String TAG_NAME = "name";
@@ -70,7 +69,12 @@ public class AlbumsActivity extends ListActivity {
 
         Intent i = getIntent();
         userId = i.getStringExtra("userName1");
-        URL_ALBUMS = "http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=" + userId + "&grp=ADL&sid=generate_a_session_id&cid=23&mod=all&models=0";
+        Log.d("userId", userId);//adl04
+        // json file with questions
+        URL_ALBUMS = "http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=" + userId + "&grp=ADL&sid=abcd&cid=23&mod=all&models=0";
+        Log.d("URL_ALBUMS", URL_ALBUMS);
+        // json file with user performance updated
+        URL_USER = "http://adapt2.sis.pitt.edu/aggregate/GetContentLevels?usr=" + userId + "&grp=ADL&sid=abcd&cid=23&mod=user";
 
         cd = new ConnectionDetector(getApplicationContext());
 
@@ -100,16 +104,26 @@ public class AlbumsActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int arg2,
                                     long arg3) {
-                // on selecting a single album
-                // TrackListActivity will be launched to show tracks inside the album
+                // on selecting a single topic
+                // TrackListActivity will be launched to show questions inside the topic
                 Intent i = new Intent(getApplicationContext(), TrackListActivity.class);
 
-                // send album id to tracklist activity to get list of songs under that album
+                // send album id to tracklist activity to get list of questions under that topic
+                // it has value [0, question numbers - 1]
                 String album_id = ((TextView) view.findViewById(R.id.album_id)).getText().toString();
-                i.putExtra("album_id", album_id);
-                i.putExtra("albums", albums.toString());
-                i.putExtra("state", state.toString());
+                String album_name = ((TextView) view.findViewById(R.id.album_name)).getText().toString();
+                i.putExtra("userId", userId);//such as adl04
+                i.putExtra("album_index", album_id);// such as 0 to 14
+                i.putExtra("album_name", album_name);// such as 0 to 14
+                try {
+                    i.putExtra("albums", albums.getJSONObject(Integer.valueOf(album_id)).toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 startActivity(i);
+                Log.d("album_id", album_id);
+                Log.d("albums json head", albums.toString().substring(0, 10));
+
             }
         });
     }
@@ -136,44 +150,17 @@ public class AlbumsActivity extends ListActivity {
          * getting Albums JSON
          * */
         protected String doInBackground(String... args) {
-            String json = "";
-
-            URL url = null;
-            try {
-                url = new URL(URL_ALBUMS);
-                Log.d("url lalala: ", url.toString());
-                URLConnection uc = url.openConnection();
-                BufferedReader in = new BufferedReader(new InputStreamReader(
-                        uc.getInputStream()));
-                String line = "";
-                while((line = in.readLine()) != null){
-                    json += line;
-                }
-                in.close();
-            } catch (MalformedURLException e) {
-                Log.d("MalformedURL lala ", e.toString());
-
-            } catch (IOException io) {
-                Log.d("ioexception lala ", io.toString());
-            }
-
-            Log.d("Albums JSON lala ", "> " + json);
-
-            //json = "[{\"id\":1,\"name\":\"127 Hours\",\"songs_count\":14},{\"id\":2,\"name\":\"Adele 21\",\"songs_count\":11},{\"id\":3,\"name\":\"Lana Del Rey - Born to Die\",\"songs_count\":12},{\"id\":4,\"name\":\"Once\",\"songs_count\":13},{\"id\":5,\"name\":\"Away We Go\",\"songs_count\":13},{\"id\":6,\"name\":\"Eminem Curtain Call\",\"songs_count\":14},{\"id\":7,\"name\":\"Bad Meets Evil Eminem\",\"songs_count\":11},{\"id\":8,\"name\":\"Safe Trip Home\",\"songs_count\":11},{\"id\":9,\"name\":\"No Angel\",\"songs_count\":12}]";
-
-            // Check your log cat for JSON reponse
-            //Log.d("substring lala", "hi" + json.substring(98190) + "hi");
-            Log.d("json length", "" + json.length());
-            json = json.replace("function (x) { var y = Math.log(x)*0.25 + 1;  return (y < 0 ? 0 : y); }", "hi");
-            //Log.d("substring lala", "hi" + json.substring(98190) + "hi");
-            Log.d("json length", "" + json.length());
+            String json = hg.getJson(URL_ALBUMS);
+            String jsonState = hg.getJson(URL_USER);
+            Log.d("user updated json", jsonState);
 
             try {
                 JSONObject js = new JSONObject(json);
+                JSONObject jsState = new JSONObject(jsonState);
                 albums = js.getJSONArray("topics");
-                state = js.getJSONArray("learners").getJSONObject(0).getJSONObject("state");
+                state = jsState.getJSONObject("learner").getJSONObject("state");
                 if (albums != null) {
-                    // looping through All albums
+                    // looping through All topics
                     Log.d("within json loop", "in loop lala");
                     for (int i = 0; i < albums.length(); i++) {
                         JSONObject c = albums.getJSONObject(i);
@@ -187,9 +174,9 @@ public class AlbumsActivity extends ListActivity {
                         HashMap<String, String> map = new HashMap<String, String>();
 
                         // adding each child node to HashMap key => value
-                        map.put(TAG_ID, i + "");
-                        map.put(TAG_NAME, name);
-                        map.put(TAG_SONGS_COUNT, songs_count);
+                        map.put(TAG_ID, i + "");//topic index from 0 to 14, which is the total topic numbers
+                        map.put(TAG_NAME, name);//topic name
+                        map.put(TAG_SONGS_COUNT, songs_count);//topic performance
                         gradeString.add(songs_count);
                         // adding HashList to ArrayList
                         albumsList.add(map);
@@ -201,7 +188,6 @@ public class AlbumsActivity extends ListActivity {
             } catch (JSONException e) {
                 Log.d("parse lala", e.toString());
             }
-
             return null;
         }
 
