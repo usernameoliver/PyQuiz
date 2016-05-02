@@ -90,7 +90,11 @@ public class LoginActivity extends Activity {
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+                Toast.makeText(getApplicationContext(), "Redirecting...", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), ExplainActivity.class);
+                String userName = String.valueOf(ed1.getText());
+                startActivity(i);
             }
         });
     }

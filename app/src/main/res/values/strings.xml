@@ -4,6 +4,10 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">User Name</string>
+    <string name="Topics">Topics</string>
+    <string name="Questions">Questions</string>
+    <string name="select">PyQuiz helps beginners learn Python much faster. The darker shade of green means the better you have mastered the knowledge.\nStep 1. click a topic that you need to study on.\nStep 2. choose question to practice\nStep 3. Type in the awser and click submit </string>
+    <string name="length">50dp</string>
     <string name="action_settings">Settings</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -15,4 +19,5 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_explain">How to Use PyQuiz</string>
 </resources>

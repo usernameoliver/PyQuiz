@@ -7,6 +7,8 @@
 
     <TextView android:text="Login" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+        android:textColor="@color/colorPrimary"
         android:id="@+id/textview"
         android:textSize="35dp"
         android:layout_alignParentTop="true"
@@ -19,11 +21,11 @@
         android:id="@+id/textView"
         android:layout_below="@+id/textview"
         android:layout_centerHorizontal="true"
-        android:textColor="#ff7aff24"
+        android:textColor="#ffbf00"
         android:textSize="35dp" />
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:id="@+id/imageView"
         android:src="@drawable/abc"
         android:layout_below="@+id/textView"
@@ -35,8 +37,8 @@
         android:id="@+id/editText"
         android:hint="Enter Name"
         android:focusable="true"
-        android:textColorHighlight="#ff7eff15"
-        android:textColorHint="#ffff25e6"
+        android:textColorHighlight="@color/yellow"
+        android:textColorHint="@color/colorPrimary"
         android:layout_marginTop="46dp"
         android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
@@ -57,7 +59,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/editText"
         android:layout_alignEnd="@+id/editText"
-        android:textColorHint="#ffff299f"
+        android:textColorHint="@color/colorPrimary"
         android:hint="Password" />
 
 
@@ -79,6 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="login"
+        android:background="@color/colorPrimary"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/textview"
@@ -87,7 +90,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="Help"
+        android:background="@color/yellow"
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/textview"
